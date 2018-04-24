@@ -60,7 +60,7 @@ mongodb_options = { :exec => "#{mongodb_bin}/mongod",
                     :pid_path => "/var/run/mongodb",
                     :ip => "0.0.0.0",
                     :port => @node[:mongo_port],
-                    :extra_opts => '' }
+                    :extra_opts => [] }
 
 if @node[:mongo_journaling]
   mongodb_options[:extra_opts]  << " --journal"
@@ -88,14 +88,13 @@ template "/etc/conf.d/mongodb" do
   })
 end
 
-execute "enable mongodb" do
+execute "enable-mongodb" do
   command "rc-update add mongodb default"
   action :run
 end
 
-execute "start mongodb" do
+execute "/etc/init.d/mongodb restart" do
   command "/etc/init.d/mongodb restart"
   action :run
-  not_if "/etc/init.d/mongodb status"
 end
 

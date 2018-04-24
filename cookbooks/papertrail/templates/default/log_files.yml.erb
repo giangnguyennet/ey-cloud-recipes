@@ -4,6 +4,6 @@ files:
 exclude_patterns:
   - <%= @exclude_patterns.join("\n  - ") %>
 destination:
-  host: <%= @destination_host %>
+  host: logs.papertrailapp.com
   port: <%= @port %>
-  protocol: tls
+ssl_server_cert: /etc/syslog.papertrail.crt

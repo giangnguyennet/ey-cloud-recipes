@@ -13,30 +13,38 @@ Design
 
 * 1+ utility instances
 * over-commit is enabled by default to ensure the least amount of problems saving your database.
-* 64-bit is required for storing over 2gigabytes worth of keys.
-* /etc/hosts mapping for `redis-instance` so that a hard config can be used to connect
+* 64-bit is required for storing over 2gigabytes worth of keys.  
 
 Backups
 --------
 
-This cookbook does not automate nor facilitate any backup method currently.  By default there is a snapshot enabled for your environment and that should provide a viable backup to recover from.  If you have any backup concerns open a ticket with our [Support Team][9].
+This cookbook does not automate not facilitate any backup method currently.  By default there is a snapshot enabled for your environment and that should provide a viable backup to recover from.  If you have any backup concerns open a ticket with our [Support Team][9].
 
 Specifics of Usage
 --------
 
-Simply add a utility instance named `redis` and the recipe will use that instance for redis. If the utility instance you wish to use redis on isn't called `redis`, update redis/attributes/default.rb with the correct instance name:
+Currently this Cookbook provides the following methods of using Redis:
 
-```ruby
-default[:redis] = {
-  :utility_name => "my_custom_name", # default: redis
-  # ...
-}
-```
+1. Redis
+
+  * Add an utility instance with the following naming scheme,
+
+  * redis
 
 Changing Defaults
 --------
 
 A large portion of the defaults of this recipe have been moved to a attribute file; if you need to change how often you save; review the attribute file and modify.
+
+Dependencies
+--------
+
+This cookbook depends on the dnapi|emerge cookbook, you can add it as a
+submodule as follows,
+
+``git submodule update --init``  
+``git submodule add git://github.com/damm/ey-dnapi.git cookbooks/dnapi`` 
+``git submodule add git://github.com/damm/ey-emerge.git cookbooks/emerge``  
 
 Installation
 --------
@@ -44,21 +52,7 @@ Installation
 Ensure you have the Dependencies installed in your local cookbooks repository ...
 Add the following to your main/recipes/default.rb
 
-``include_recipe "redis"``
-
-Choosing a different Redis version
---------
-This recipe installs Redis 2.8.13-r1 by default. We do not recommend earlier versions of Redis 2.8.x or 2.6.x as these versions have a known vulnerability: http://benmmurphy.github.io/blog/2015/06/04/redis-eval-lua-sandbox-escape/
-
-To install a different version of Redis:
-
-1. Change the `:version => "2.8.13-r1",` line in `attributes/default.rb` to the version you want to install
-2. Copy over the corresponding `redis-?.?.conf.erb` file to `templates/default/redis.conf.erb`
-
-
-Notes
-------
-Please be aware these are default config files and will likely need to be updated :)
+``require_recipe "redis"``  
 
 How to get Support
 --------
